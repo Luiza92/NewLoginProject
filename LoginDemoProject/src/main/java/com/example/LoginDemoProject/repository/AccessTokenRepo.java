@@ -1,11 +1,10 @@
 package com.example.LoginDemoProject.repository;
 
 import com.example.LoginDemoProject.model.AccessToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -14,9 +13,8 @@ import java.util.Map;
 @Repository
 public class AccessTokenRepo implements AccessTokenRepository {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private AccessToken accessToken;
-
 
     @Override
     public AccessToken get(int id) throws SQLException {
@@ -31,8 +29,7 @@ public class AccessTokenRepo implements AccessTokenRepository {
         accessToken.setToken((String) result.get("token"));
         accessToken.setCreate((Date) result.get("create"));
         accessToken.setExpires((Date) result.get("expires"));
-        accessToken.setRefresh_token((String) result.get("refresh_token"));
-
+        accessToken.setRefresh_token_id((int) result.get("refresh_token_id"));
 
         Integer accessToken_id = result.get("id") != null ? ((Long) result.get("id")).intValue() : null;
         accessToken.setId(accessToken_id);
@@ -41,21 +38,14 @@ public class AccessTokenRepo implements AccessTokenRepository {
 
     @Override
     public int insert(AccessToken accessToken) throws SQLException {
-        GeneratedKeyHolder holder = new GeneratedKeyHolder();
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement statement = con.prepareStatement("insert into access_token (user_id, token, create,expires,refresh_token) values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                statement.setInt(1, accessToken.getUser_id());
-                statement.setString(2, accessToken.getToken());
-                statement.setDate(3, accessToken.getCreate());
-                statement.setDate(4, accessToken.getExpires());
-                statement.setString(5, accessToken.getRefresh_token());
-                return statement;
-            }
-        }, holder);
+        return jdbcTemplate.update(
+                "insert into access_token (user_id, token, `create`, expires, refresh_token_id) values (?,?,?,?,?)",
+                accessToken.getUser_id(),
+                accessToken.getToken(),
+                accessToken.getCreate(),
+                accessToken.getExpires(),
+                accessToken.getRefresh_token_id());
 
-        return ((Long) holder.getKey().longValue()).intValue();
     }
 
     @Override
@@ -76,7 +66,7 @@ public class AccessTokenRepo implements AccessTokenRepository {
                             a.setToken(rs.getString("token"));
                             a.setCreate(rs.getDate("create"));
                             a.setExpires(rs.getDate("expires"));
-                            a.setRefresh_token(rs.getString("refresh_token"));
+                            a.setRefresh_token_id(rs.getInt("refresh_token_id"));
                             return a;
                         }
 
@@ -88,42 +78,15 @@ public class AccessTokenRepo implements AccessTokenRepository {
 
     @Override
     public int update(AccessToken accessToken) throws SQLException {
-        String sql = "update access_token set user_id = ?, token = ?, create = ?, expires = ?, refresh_token = ? ,  where id = ?";
-        System.err.println(accessToken.getUser_id() + ", " + accessToken.getToken() + ", " + accessToken.getCreate() + ", " + accessToken.getExpires() + ", " + accessToken.getRefresh_token() + ", " + accessToken.getId());
-        int result = jdbcTemplate.update(sql, accessToken.getUser_id(), accessToken.getToken(), accessToken.getCreate(), accessToken.getExpires(), accessToken.getRefresh_token(), accessToken.getId());
+        String sql = "update access_token set user_id = ?, token = ?, create = ?, expires = ?, refresh_token_id = ? ,  where id = ?";
+        System.err.println(accessToken.getUser_id() + ", " + accessToken.getToken() + ", " + accessToken.getCreate() + ", " + accessToken.getExpires() + ", " + accessToken.getRefresh_token_id() + ", " + accessToken.getId());
+        int result = jdbcTemplate.update(sql, accessToken.getUser_id(), accessToken.getToken(), accessToken.getCreate(), accessToken.getExpires(), accessToken.getRefresh_token_id(), accessToken.getId());
         if (result > 0) {
             System.out.println("a new row has been update.");
             return accessToken.getId();
         }
         return accessToken.getId();
 
-    }
-
-    @Override
-    public int insertAccess_token(int user_id, int token, Date create, Date expires, String refresh_token) throws SQLException {
-
-        System.err.println(user_id);
-        System.err.println(token);
-        System.err.println(create);
-        System.err.println(expires);
-        System.err.println(refresh_token);
-        GeneratedKeyHolder holder = new GeneratedKeyHolder();
-
-
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement statement = con.prepareStatement("insert into access_token ( user_id , token, create, expires, refresh_token ) values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-
-                statement.setInt(1, user_id);
-                statement.setInt(2, token);
-                statement.setDate(3, create);
-                statement.setDate(4, expires);
-                statement.setString(5, refresh_token);
-                return statement;
-            }
-        }, holder);
-        return ((Long) holder.getKey().longValue()).intValue();
     }
 
 

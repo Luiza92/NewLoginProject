@@ -94,7 +94,7 @@ public class UserController {
     }
 
 
-    @GetMapping(path = "/api/user/{user_id} ", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/api/user/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable("user_id") String user_id) throws JSONException {
         System.out.printf("4k44k4k4k");
         try {

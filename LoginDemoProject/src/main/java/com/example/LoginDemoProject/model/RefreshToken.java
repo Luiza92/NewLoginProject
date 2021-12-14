@@ -1,29 +1,24 @@
 package com.example.LoginDemoProject.model;
 
 import java.sql.Date;
-import java.util.List;
 
-public class AccessToken {
+public class RefreshToken {
 
     private int id;
     private int user_id;
     private String token;
     private Date create;
     private Date expires;
-    private int refresh_token_id;
-    private List<Integer> userId;
 
-
-    public AccessToken(int id, int user_id, String token, Date create, Date expires, int refresh_token_id) {
+    public RefreshToken(int id, int user_id, String token, Date create, Date expires) {
         this.id = id;
         this.user_id = user_id;
         this.token = token;
         this.create = create;
         this.expires = expires;
-        this.refresh_token_id = refresh_token_id;
     }
 
-    public AccessToken() {
+    public RefreshToken() {
 
     }
 
@@ -65,13 +60,5 @@ public class AccessToken {
 
     public void setExpires(Date expires) {
         this.expires = expires;
-    }
-
-    public int getRefresh_token_id() {
-        return refresh_token_id;
-    }
-
-    public void setRefresh_token_id(int refresh_token_id) {
-        this.refresh_token_id = refresh_token_id;
     }
 }
