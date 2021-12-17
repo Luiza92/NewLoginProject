@@ -1,16 +1,17 @@
 package com.example.LoginDemoProject.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class RefreshToken {
 
     private int id;
     private int user_id;
     private String token;
-    private Date create;
-    private Date expires;
+    private Timestamp create;
+    private Timestamp expires;
 
-    public RefreshToken(int id, int user_id, String token, Date create, Date expires) {
+    public RefreshToken(int id, int user_id, String token, Timestamp create, Timestamp expires) {
         this.id = id;
         this.user_id = user_id;
         this.token = token;
@@ -46,19 +47,19 @@ public class RefreshToken {
         this.token = token;
     }
 
-    public Date getCreate() {
+    public Timestamp getCreate() {
         return create;
     }
 
-    public void setCreate(Date create) {
+    public void setCreate(Timestamp create) {
         this.create = create;
     }
 
-    public Date getExpires() {
+    public Timestamp getExpires() {
         return expires;
     }
 
-    public void setExpires(Date expires) {
+    public void setExpires(Timestamp expires) {
         this.expires = expires;
     }
 }

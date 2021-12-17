@@ -5,16 +5,20 @@ public class User {
 
         private int id;
         private String username;
-        private String surname;
+        private String firstName;
+        private String lastName;
         private String email;
         private String password;
+        private int  status;
 
-    public User(int id, String username, String surname, String email, String password) {
+    public User(int id, String username, String firstName, String lastName, String email, String password, int status) {
         this.id = id;
         this.username = username;
-        this.surname = surname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.status = status;
     }
 
     public User() {
@@ -30,19 +34,35 @@ public class User {
     }
 
     public String getUsername() {
-        return username;
+        return username.toLowerCase();
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getFirstName() {
+        return firstName.toLowerCase();
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName.toLowerCase();
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getEmail() {
@@ -60,4 +80,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Map;
 
 @Service
@@ -39,8 +40,8 @@ public class RefreshTokenService extends RefreshTokenRepo {
 
         refreshToken.setUser_id((int) result.get("user_id"));
         refreshToken.setToken((String) result.get("token"));
-        refreshToken.setCreate((Date) result.get("create"));
-        refreshToken.setExpires((Date) result.get("expires"));
+        refreshToken.setCreate((Timestamp) result.get("create"));
+        refreshToken.setExpires((Timestamp) result.get("expires"));
 
         refreshToken.setId((int) result.get("id"));
         return refreshToken;

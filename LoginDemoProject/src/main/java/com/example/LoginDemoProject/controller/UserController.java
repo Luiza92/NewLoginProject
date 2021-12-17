@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
+
 @Controller
 public class UserController {
 
@@ -35,9 +36,15 @@ public class UserController {
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
-            if (userValidation.isValidSurname(modelTO.getSurname()) == false) {
+            if (userValidation.isValidFirstName(modelTO.getFirstName()) == false) {
                 JSONObject res = new JSONObject();
-                res.put("error_message", "Error Invalid Surname ");
+                res.put("error_message", "Error Invalid FirstName ");
+                return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+            }
+
+            if (userValidation.isValidLastName(modelTO.getLastName()) == false) {
+                JSONObject res = new JSONObject();
+                res.put("error_message", "Error Invalid LastName ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
@@ -55,17 +62,21 @@ public class UserController {
             }
 
             System.err.println("username - " + modelTO.getUsername());
-            System.err.println("surname - " + modelTO.getSurname());
+            System.err.println("firstName - " + modelTO.getFirstName());
+            System.err.println("lastName - " + modelTO.getLastName());
             System.err.println("email - " + modelTO.getEmail());
             System.err.println("password  - " + modelTO.getPassword());
+            System.err.println("status - " + modelTO.getStatus());
 
 
             User user = new User();
 
             user.setUsername(modelTO.getUsername());
-            user.setSurname(modelTO.getSurname());
+            user.setFirstName(modelTO.getFirstName());
+            user.setLastName(modelTO.getLastName());
             user.setEmail(modelTO.getEmail());
             user.setPassword(new BCryptPasswordEncoder().encode(modelTO.getPassword()));
+            user.setStatus(modelTO.getStatus());
 
 
             int userId = this.userService.add(user);
@@ -75,9 +86,11 @@ public class UserController {
 
             res.put("id", user1.getId());
             res.put("username", user1.getUsername());
-            res.put("surname", user1.getSurname());
+            res.put("firstName", user1.getFirstName());
+            res.put("lastName", user1.getLastName());
             res.put("email", user1.getEmail());
             res.put("password", user1.getPassword());
+            res.put("status", user1.getStatus());
 
 
             return new ResponseEntity<>(res.toString(), HttpStatus.OK);
@@ -96,7 +109,6 @@ public class UserController {
 
     @GetMapping(path = "/api/user/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable("user_id") String user_id) throws JSONException {
-        System.out.printf("4k44k4k4k");
         try {
 
             System.err.print("get " + user_id);
@@ -106,9 +118,11 @@ public class UserController {
 
             res.put("user_id", user.getId());
             res.put("user_username", user.getUsername());
-            res.put("user_surname", user.getSurname());
+            res.put("user_firstName", user.getFirstName());
+            res.put("user_lastName", user.getLastName());
             res.put("user_email", user.getEmail());
             res.put("user_password", user.getPassword());
+            res.put("user_status", user.getStatus());
 
             return new ResponseEntity<>(res.toString(), HttpStatus.OK);
 
@@ -156,9 +170,15 @@ public class UserController {
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
-            if (userValidation.isValidSurname(modelTO.getSurname()) == false) {
+            if (userValidation.isValidFirstName(modelTO.getFirstName()) == false) {
                 JSONObject res = new JSONObject();
-                res.put("error_message", "Error Invalid Surname ");
+                res.put("error_message", "Error Invalid FirstName ");
+                return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+            }
+
+            if (userValidation.isValidLastName(modelTO.getLastName()) == false) {
+                JSONObject res = new JSONObject();
+                res.put("error_message", "Error Invalid LastName ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
@@ -176,17 +196,21 @@ public class UserController {
             }
 
             System.err.println("username - " + modelTO.getUsername());
-            System.err.println("surname - " + modelTO.getSurname());
+            System.err.println("firstName - " + modelTO.getFirstName());
+            System.err.println("lastName - " + modelTO.getLastName());
             System.err.println("email - " + modelTO.getEmail());
             System.err.println("password  - " + modelTO.getPassword());
+            System.err.println("status - " + modelTO.getStatus());
             System.err.println(user_id);
 
             User user = new User();
 
             user.setUsername(modelTO.getUsername());
-            user.setSurname(modelTO.getSurname());
+            user.setFirstName(modelTO.getFirstName());
+            user.setLastName(modelTO.getLastName());
             user.setEmail(modelTO.getEmail());
             user.setPassword(modelTO.getPassword());
+            user.setStatus(modelTO.getStatus());
             user.setId(user_id);
 
             int userId = this.userService.update(user);
@@ -195,9 +219,11 @@ public class UserController {
             User user1 = this.userService.get(user_id);
 
             res.put("username", user1.getUsername());
-            res.put("surname", user1.getSurname());
+            res.put("firstName", user1.getFirstName());
+            res.put("lastName", user1.getLastName());
             res.put("email", user1.getEmail());
             res.put("password", user1.getPassword());
+            res.put("status", user1.getStatus());
 
 
             return new ResponseEntity<>(res.toString(), HttpStatus.OK);

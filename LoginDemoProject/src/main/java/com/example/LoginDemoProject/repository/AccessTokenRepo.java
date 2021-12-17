@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.Map;
 
 @Repository
-public class AccessTokenRepo implements AccessTokenRepository {
+public class AccessTokenRepo implements AccessTokenRepository  {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -27,8 +27,8 @@ public class AccessTokenRepo implements AccessTokenRepository {
 
         accessToken.setUser_id((int) result.get("user_id"));
         accessToken.setToken((String) result.get("token"));
-        accessToken.setCreate((Date) result.get("create"));
-        accessToken.setExpires((Date) result.get("expires"));
+        accessToken.setCreate((Timestamp) result.get("create"));
+        accessToken.setExpires((Timestamp) result.get("expires"));
         accessToken.setRefresh_token_id((int) result.get("refresh_token_id"));
 
         Integer accessToken_id = result.get("id") != null ? ((Long) result.get("id")).intValue() : null;
@@ -64,8 +64,8 @@ public class AccessTokenRepo implements AccessTokenRepository {
                             a.setId(rs.getInt("id"));
                             a.setUser_id(rs.getInt("user_id"));
                             a.setToken(rs.getString("token"));
-                            a.setCreate(rs.getDate("create"));
-                            a.setExpires(rs.getDate("expires"));
+                            a.setCreate(rs.getTimestamp("create"));
+                            a.setExpires(rs.getTimestamp("expires"));
                             a.setRefresh_token_id(rs.getInt("refresh_token_id"));
                             return a;
                         }

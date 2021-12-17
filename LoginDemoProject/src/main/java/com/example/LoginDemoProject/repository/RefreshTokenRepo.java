@@ -30,8 +30,8 @@ public class RefreshTokenRepo implements RefreshTokenRepository {
 
         refreshToken.setUser_id((int) result.get("user_id"));
         refreshToken.setToken((String) result.get("token"));
-        refreshToken.setCreate((Date) result.get("create"));
-        refreshToken.setExpires((Date) result.get("expires"));
+        refreshToken.setCreate((Timestamp) result.get("create"));
+        refreshToken.setExpires((Timestamp) result.get("expires"));
 
 
         Integer refreshToken_id = result.get("id") != null ? ((Long) result.get("id")).intValue() : null;
@@ -48,8 +48,8 @@ public class RefreshTokenRepo implements RefreshTokenRepository {
                 PreparedStatement statement = con.prepareStatement(" insert into refresh_token (user_id, token, `create`,expires) values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                 statement.setInt(1,  refreshToken.getUser_id());
                 statement.setString(2,  refreshToken.getToken());
-                statement.setDate(3, refreshToken.getCreate());
-                statement.setDate(4,  refreshToken.getExpires());
+                statement.setTimestamp(3, refreshToken.getCreate());
+                statement.setTimestamp(4,  refreshToken.getExpires());
                 return statement;
             }
         }, holder);
@@ -73,14 +73,15 @@ public class RefreshTokenRepo implements RefreshTokenRepository {
                             refreshToken.setId(rs.getInt("id"));
                             refreshToken.setUser_id(rs.getInt("user_id"));
                             refreshToken.setToken(rs.getString("token"));
-                            refreshToken.setCreate(rs.getDate("create"));
-                            refreshToken.setExpires(rs.getDate("expires"));
+                            refreshToken.setCreate(rs.getTimestamp("create"));
+                            refreshToken.setExpires(rs.getTimestamp("expires"));
                             return refreshToken;
                         }
 
                         return null;
                     }
                 },
+
                 refreshToken_id);
     }
 

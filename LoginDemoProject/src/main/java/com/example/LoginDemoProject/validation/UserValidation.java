@@ -11,10 +11,17 @@ public class UserValidation {
         return m.matches();
     }
 
-    public boolean isValidSurname(String surname) {
+    public boolean isValidFirstName(String firstName) {
         String ePattern = "^.*([a-z0-9A-Z_-]+)";
         Pattern p = Pattern.compile(ePattern);
-        java.util.regex.Matcher m = p.matcher(surname);
+        java.util.regex.Matcher m = p.matcher(firstName);
+        return m.matches();
+    }
+
+    public boolean isValidLastName(String lastName) {
+        String ePattern = "^.*([a-z0-9A-Z_-]+)";
+        Pattern p = Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(lastName);
         return m.matches();
     }
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +42,8 @@ public class AccessTokenService extends AccessTokenRepo {
 
         accessToken.setUser_id((int) result.get("user_id"));
         accessToken.setToken((String) result.get("token"));
-        accessToken.setCreate((Date) result.get("create"));
-        accessToken.setExpires((Date) result.get("expires"));
+        accessToken.setCreate((Timestamp) result.get("create"));
+        accessToken.setExpires((Timestamp) result.get("expires"));
         accessToken.setRefresh_token_id((int) result.get("refresh_token_id"));
 
 
