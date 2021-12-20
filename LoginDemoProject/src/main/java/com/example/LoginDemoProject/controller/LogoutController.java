@@ -24,6 +24,7 @@ public class LogoutController {
 
     @PostMapping(path = "/api/logout", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object logout(@RequestHeader Map<String, String> headers) throws JSONException {
+        JSONObject res = new JSONObject();
         try {
             String sql = ("select * from access_token where token = ?  ;");
             System.err.println("token: " + headers.get("authorization"));
@@ -38,20 +39,14 @@ public class LogoutController {
             int result2 = jdbcTemplate.update(sql2, refresh_token_id);
 
 
-            if (result1 == 0) {
+            if (result1 == 0 || result2 == 0) {
                 System.out.println("delete token");
             }
-            if (result2 == 0) {
-                System.out.println("delete refresh_token_id");
-            }
-
-            JSONObject res = new JSONObject();
 
             res.put("message", "this user logout ");
             return new ResponseEntity<>(res.toString(), HttpStatus.OK);
 
         } catch (Exception ex) {
-            JSONObject res = new JSONObject();
             res.put("error_message", " not found  " + ex.getMessage());
             return new ResponseEntity<>(res.toString(), HttpStatus.UNAUTHORIZED);
         }

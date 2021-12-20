@@ -1,5 +1,7 @@
 package com.example.LoginDemoProject.model;
 
+import sun.security.util.Password;
+
 public class User {
 
 
@@ -10,6 +12,7 @@ public class User {
         private String email;
         private String password;
         private int  status;
+        private String confirmPassword;
 
     public User(int id, String username, String firstName, String lastName, String email, String password, int status) {
         this.id = id;
@@ -81,5 +84,13 @@ public class User {
         this.password = password;
     }
 
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
 }

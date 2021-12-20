@@ -12,8 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -24,48 +23,43 @@ public class RegistrationController {
     User user = new User();
 
     UserValidation userValidation = new UserValidation();
-    private RegistrationController request;
 
 
     @PostMapping(path = "/api/registration", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> registration(@ModelAttribute User modelTO) throws JSONException {
+        JSONObject res = new JSONObject();
         try {
 
 
             if (userValidation.isValidUsername(modelTO.getUsername()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid Username ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidFirstName(modelTO.getFirstName()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid FirstName ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidLastName(modelTO.getLastName()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid LastName ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidEmail(modelTO.getEmail()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid Email");
                 return new ResponseEntity<>(res.toString(), HttpStatus.BAD_REQUEST);
             }
 
-//            String password = this.user.getPassword();
-//            String cPassword = this.user.getConfirmPassword();
-//            if (passworp.equals(cPassword))
+            if(!modelTO.getPassword().equals(modelTO.getConfirmPassword())){
+                res.put("error message - ","password does not match");
+                return new ResponseEntity<>(res.toString(), HttpStatus.BAD_REQUEST);
+            }
 
-
-
-            if (userValidation.isValidPassword(modelTO.getPassword()) == false) {
-                    JSONObject res = new JSONObject();
+                if (userValidation.isValidPassword(modelTO.getPassword()) == false) {
                     res.put("error_message", "Error Invalid Password");
                     return new ResponseEntity<>(res.toString(), HttpStatus.BAD_REQUEST);
+
                 }
 
             System.err.println("username - " + modelTO.getUsername());
@@ -81,11 +75,11 @@ public class RegistrationController {
             user.setLastName(modelTO.getLastName());
             user.setEmail(modelTO.getEmail());
             user.setPassword(new BCryptPasswordEncoder().encode(modelTO.getPassword()));
+            user.setStatus(1);
 
             int userId = this.userService.add(user);
             User user1 = this.userService.get(userId);
 
-            JSONObject res = new JSONObject();
 
             res.put("id", user1.getId());
             res.put("username", user1.getUsername());
@@ -96,14 +90,15 @@ public class RegistrationController {
 
             return new ResponseEntity<>(res.toString(), HttpStatus.OK);
 
+
         } catch (DuplicateKeyException ex) {
-            JSONObject res = new JSONObject();
             res.put("error_message", "DUPLICATE ERROR MESSAGE " + ex.getMessage());
             return new ResponseEntity<>(res.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception ex) {
-            JSONObject res = new JSONObject();
-            res.put("error_message", "not found  " + ex.getMessage());
-            return new ResponseEntity<>(res.toString(), HttpStatus.NOT_FOUND);
+            res.put("error_message", "server error  " + ex.getMessage());
+            ex.printStackTrace();
+            return new ResponseEntity<>(res.toString(), HttpStatus.BAD_REQUEST);
+
         }
     }
 }

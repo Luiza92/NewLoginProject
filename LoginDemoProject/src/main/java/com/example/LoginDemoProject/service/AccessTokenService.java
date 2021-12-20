@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -64,5 +62,9 @@ public class AccessTokenService extends AccessTokenRepo {
         return this.accessTokenRepo.delete(id);
 
     }
+
+//    public AccessToken deleteByUserId(int user_id) throws SQLException {
+//        return this.accessTokenRepo.deleteByUserId(user_id);
+//    }
 
 }

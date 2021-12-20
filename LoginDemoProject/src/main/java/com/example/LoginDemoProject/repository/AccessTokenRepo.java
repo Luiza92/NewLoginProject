@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.Map;
 
 @Repository
-public class AccessTokenRepo implements AccessTokenRepository  {
+public class AccessTokenRepo implements AccessTokenRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -88,6 +88,30 @@ public class AccessTokenRepo implements AccessTokenRepository  {
         return accessToken.getId();
 
     }
-
+//
+//    public int deleteByUserId(int user_id, AccessToken accessToken) throws SQLException {
+//        return jdbcTemplate.query(
+//                "delete from access_token where accessToken_id = ?;",
+//                new ResultSetExtractor<AccessToken accessToken > () {
+//
+//            return jdbcTemplate.update(
+//                    "insert into access_token (user_id, token, `create`, expires, refresh_token_id) values (?,?,?,?,?)",
+//                    accessToken.getUser_id(),
+//                    accessToken.getToken(),
+//                    accessToken.getCreate(),
+//                    accessToken.getExpires(),
+//                    accessToken.getRefresh_token_id());
+//
+//
+//        }
+//        }
+//    }
 
 }
+
+
+
+
+
+
+

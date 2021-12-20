@@ -1,6 +1,11 @@
 package com.example.LoginDemoProject.controller;
 
+import com.example.LoginDemoProject.model.AccessToken;
+import com.example.LoginDemoProject.model.RefreshToken;
 import com.example.LoginDemoProject.model.User;
+import com.example.LoginDemoProject.repository.AccessTokenRepo;
+import com.example.LoginDemoProject.service.AccessTokenService;
+import com.example.LoginDemoProject.service.RefreshTokenService;
 import com.example.LoginDemoProject.service.UserService;
 import com.example.LoginDemoProject.validation.UserValidation;
 import org.json.JSONException;
@@ -22,6 +27,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AccessTokenService accessTokenService;
+    private RefreshTokenService refreshTokenService;
+
     User user = new User();
     UserValidation userValidation = new UserValidation();
 
@@ -135,10 +145,9 @@ public class UserController {
 
 
     @DeleteMapping(path = "/api/user/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> geteUser1(@PathVariable("user_id") int user_id) throws JSONException {
+    public ResponseEntity<?> deleteUser(@PathVariable("user_id") int user_id) throws JSONException {
+        JSONObject res = new JSONObject();
         try {
-
-            JSONObject res = new JSONObject();
 
             System.err.print("delete " + user_id);
             boolean user = this.userService.delete(user_id);
@@ -147,11 +156,15 @@ public class UserController {
                 res.put("message", "Deleted");
                 return new ResponseEntity<>(res.toString(), HttpStatus.OK);
             }
+
+
+//            AccessToken accessToken = this.accessTokenService.deleteByUserId(user_id);
+//            System.err.print("delete " + user_id);
+
             res.put("error_message", "this user not found ");
             return new ResponseEntity<>(res.toString(), HttpStatus.NOT_FOUND);
         } catch (Exception ex) {
 
-            JSONObject res = new JSONObject();
             ex.printStackTrace();
 
             res.put("error_message", " ERROR MESSAGE " + ex.getMessage());
