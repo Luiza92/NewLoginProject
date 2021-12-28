@@ -59,5 +59,8 @@ public class RefreshTokenService extends RefreshTokenRepo {
         return this.refreshTokenRepo.delete(id);
     }
 
+    public int deleteByUserId(int user_id) throws SQLException {
+        return this.refreshTokenRepo.deleteByUserId(user_id);
+    }
 
 }

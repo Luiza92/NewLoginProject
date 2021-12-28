@@ -1,9 +1,6 @@
 package com.example.LoginDemoProject.controller;
 
-import com.example.LoginDemoProject.model.AccessToken;
-import com.example.LoginDemoProject.model.RefreshToken;
 import com.example.LoginDemoProject.model.User;
-import com.example.LoginDemoProject.repository.AccessTokenRepo;
 import com.example.LoginDemoProject.service.AccessTokenService;
 import com.example.LoginDemoProject.service.RefreshTokenService;
 import com.example.LoginDemoProject.service.UserService;
@@ -20,52 +17,49 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @Controller
 public class UserController {
-
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private AccessTokenService accessTokenService;
+
+    @Autowired
     private RefreshTokenService refreshTokenService;
 
     User user = new User();
+
     UserValidation userValidation = new UserValidation();
 
 
     @PostMapping(path = "/api/user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addUser1(@ModelAttribute User modelTO) throws JSONException {
+        JSONObject res = new JSONObject();
         try {
 
             if (userValidation.isValidUsername(modelTO.getUsername()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid Username ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidFirstName(modelTO.getFirstName()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid FirstName ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidLastName(modelTO.getLastName()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid LastName ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidEmail(modelTO.getEmail()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid Email");
                 return new ResponseEntity<>(res.toString(), HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidPassword(modelTO.getPassword()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid Password");
                 return new ResponseEntity<>(res.toString(), HttpStatus.BAD_REQUEST);
 
@@ -92,7 +86,6 @@ public class UserController {
             int userId = this.userService.add(user);
             User user1 = this.userService.get(userId);
 
-            JSONObject res = new JSONObject();
 
             res.put("id", user1.getId());
             res.put("username", user1.getUsername());
@@ -106,11 +99,9 @@ public class UserController {
             return new ResponseEntity<>(res.toString(), HttpStatus.OK);
 
         } catch (DuplicateKeyException ex) {
-            JSONObject res = new JSONObject();
             res.put("error_message", "DUPLICATE ERROR MESSAGE " + ex.getMessage());
             return new ResponseEntity<>(res.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception ex) {
-            JSONObject res = new JSONObject();
             res.put("error_message", "this user not found " + ex.getMessage());
             return new ResponseEntity<>(res.toString(), HttpStatus.NOT_FOUND);
         }
@@ -119,11 +110,11 @@ public class UserController {
 
     @GetMapping(path = "/api/user/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUser(@PathVariable("user_id") String user_id) throws JSONException {
+        JSONObject res = new JSONObject();
         try {
 
             System.err.print("get " + user_id);
 
-            JSONObject res = new JSONObject();
             User user = this.userService.get(Integer.parseInt(user_id));
 
             res.put("user_id", user.getId());
@@ -137,7 +128,6 @@ public class UserController {
             return new ResponseEntity<>(res.toString(), HttpStatus.OK);
 
         } catch (Exception ex) {
-            JSONObject res = new JSONObject();
             res.put("error_message", "this user not found " + ex.getMessage());
             return new ResponseEntity<>(res.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -149,60 +139,58 @@ public class UserController {
         JSONObject res = new JSONObject();
         try {
 
-            System.err.print("delete " + user_id);
+
             boolean user = this.userService.delete(user_id);
+            System.err.print("delete user_id -  " + user_id);
 
-            if (user) {
-                res.put("message", "Deleted");
-                return new ResponseEntity<>(res.toString(), HttpStatus.OK);
-            }
+            // if(user != null)
+
+            int delete = this.accessTokenService.deleteByUserId(user_id);
+            System.err.print("delete accessToken - " + user_id);
+
+            int delete1 = this.refreshTokenService.deleteByUserId(user_id);
+            System.err.println("delete refreshToken - " + user_id);
 
 
-//            AccessToken accessToken = this.accessTokenService.deleteByUserId(user_id);
-//            System.err.print("delete " + user_id);
+            res.put("message", "Deleted");
+            return new ResponseEntity<>(res.toString(), HttpStatus.OK);
 
-            res.put("error_message", "this user not found ");
-            return new ResponseEntity<>(res.toString(), HttpStatus.NOT_FOUND);
         } catch (Exception ex) {
 
             ex.printStackTrace();
-
-            res.put("error_message", " ERROR MESSAGE " + ex.getMessage());
-            return new ResponseEntity<>(res.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
+            res.put("error_message", "this user not found ");
+            return new ResponseEntity<>(res.toString(), HttpStatus.NOT_FOUND);
         }
+
     }
+
 
     @PutMapping(path = "/api/user/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUser1(@ModelAttribute User modelTO, @PathVariable("user_id") Integer user_id) throws JSONException {
-
+        JSONObject res = new JSONObject();
         try {
 
             if (userValidation.isValidUsername(modelTO.getUsername()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid Username ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidFirstName(modelTO.getFirstName()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid FirstName ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidLastName(modelTO.getLastName()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid LastName ");
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidEmail(modelTO.getEmail()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid Email");
                 return new ResponseEntity<>(res.toString(), HttpStatus.BAD_REQUEST);
             }
 
             if (userValidation.isValidPassword(modelTO.getPassword()) == false) {
-                JSONObject res = new JSONObject();
                 res.put("error_message", "Error Invalid Password");
                 return new ResponseEntity<>(res.toString(), HttpStatus.BAD_REQUEST);
 
@@ -227,7 +215,6 @@ public class UserController {
             user.setId(user_id);
 
             int userId = this.userService.update(user);
-            JSONObject res = new JSONObject();
 
             User user1 = this.userService.get(user_id);
 
@@ -238,15 +225,12 @@ public class UserController {
             res.put("password", user1.getPassword());
             res.put("status", user1.getStatus());
 
-
             return new ResponseEntity<>(res.toString(), HttpStatus.OK);
 
         } catch (DuplicateKeyException ex) {
-            JSONObject res = new JSONObject();
             res.put("error_message", "DUPLICATE ERROR MESSAGE " + ex.getMessage());
             return new ResponseEntity<>(res.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception ex) {
-            JSONObject res = new JSONObject();
             res.put("error_message", "this user not found " + ex.getMessage());
             return new ResponseEntity<>(res.toString(), HttpStatus.NOT_FOUND);
         }

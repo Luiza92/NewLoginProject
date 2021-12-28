@@ -63,8 +63,8 @@ public class AccessTokenService extends AccessTokenRepo {
 
     }
 
-//    public AccessToken deleteByUserId(int user_id) throws SQLException {
-//        return this.accessTokenRepo.deleteByUserId(user_id);
-//    }
+    public int deleteByUserId(int user_id) throws SQLException {
+        return this.accessTokenRepo.deleteByUserId(user_id);
+    }
 
 }

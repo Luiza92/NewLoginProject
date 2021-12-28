@@ -97,4 +97,14 @@ public class RefreshTokenRepo implements RefreshTokenRepository {
         return refreshToken.getId();
 
     }
+
+    @Override
+    public int deleteByUserId(int user_id) throws SQLException {
+        return jdbcTemplate.update(
+                "delete  from refresh_token where user_id = ?",
+                user_id);
+
+    }
+
+
 }

@@ -14,5 +14,6 @@ public interface RefreshTokenRepository {
 
     int update(RefreshToken refreshToken) throws SQLException;
 
+     int deleteByUserId(int user_id)throws SQLException;
 
 }

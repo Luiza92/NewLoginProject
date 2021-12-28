@@ -14,7 +14,7 @@ public interface AccessTokenRepository {
 
     int update(AccessToken accessToken) throws SQLException;
 
-  //  AccessToken deleteByUserId(int id)throws SQLException;
+    int deleteByUserId(int user_id)throws SQLException;
 
 
 }

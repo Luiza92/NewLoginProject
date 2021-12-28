@@ -88,24 +88,14 @@ public class AccessTokenRepo implements AccessTokenRepository {
         return accessToken.getId();
 
     }
-//
-//    public int deleteByUserId(int user_id, AccessToken accessToken) throws SQLException {
-//        return jdbcTemplate.query(
-//                "delete from access_token where accessToken_id = ?;",
-//                new ResultSetExtractor<AccessToken accessToken > () {
-//
-//            return jdbcTemplate.update(
-//                    "insert into access_token (user_id, token, `create`, expires, refresh_token_id) values (?,?,?,?,?)",
-//                    accessToken.getUser_id(),
-//                    accessToken.getToken(),
-//                    accessToken.getCreate(),
-//                    accessToken.getExpires(),
-//                    accessToken.getRefresh_token_id());
-//
-//
-//        }
-//        }
-//    }
+
+    public int deleteByUserId(int user_id) throws SQLException {
+        return jdbcTemplate.update(
+                "delete  from access_token where user_id = ?",
+                user_id);
+
+
+    }
 
 }
 

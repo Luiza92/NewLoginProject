@@ -27,7 +27,7 @@ public class UserRepo implements UserRepository {
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement statement = con.prepareStatement("insert into users (username, firstName, lastName, email, password,status) values (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement statement = con.prepareStatement("insert into users (username, firstName, lastName, email, password, status ) values (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                 statement.setString(1, user.getUsername());
                 statement.setString(2, user.getFirstName());
                 statement.setString(3, user.getLastName());
@@ -128,8 +128,8 @@ public class UserRepo implements UserRepository {
 
     @Override
     public int update(User user) throws SQLException {
-        String sql = "update users set username = ?, firstName=?,lastName=?, email = ?, password = ?, status=? where id = ?";
-        System.err.println(user.getUsername() + ", " + user.getFirstName() + ", " + user.getLastName() + "," + user.getEmail() + ", " + user.getPassword() + ", " + user.getStatus() + ", " + user.getId());
+        String sql = "update users set username = ?, firstName=?, lastName=?, email = ?, password = ?,  status=? where id = ?";
+        System.err.println(user.getUsername() + ", " + user.getFirstName() + ", " + user.getLastName() + "," + user.getEmail() + ", " + user.getPassword() + ", " +  user.getStatus() + ", " + user.getId());
         int result = jdbcTemplate.update(sql, user.getUsername(), user.getFirstName(), user.getLastName() , user.getEmail(), user.getPassword(), user.getStatus(), user.getId());
         if (result > 0) {
             System.out.println("user has been update.");

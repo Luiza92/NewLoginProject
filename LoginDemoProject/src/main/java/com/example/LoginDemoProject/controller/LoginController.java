@@ -17,16 +17,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+
 @Controller
 public class LoginController {
-
 
     @Autowired
     private UserService userService;
@@ -38,14 +37,16 @@ public class LoginController {
     @Autowired
     private RefreshTokenService refreshTokenService;
 
+
     private GenerateAccessToken generateAccessToken = new GenerateAccessToken();
     private GenerateRefreshToken generateRefreshToken = new GenerateRefreshToken();
 
+
+
     @PostMapping(path = "/api/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@ModelAttribute User modelTO) throws JSONException {
+        JSONObject res = new JSONObject();
         try {
-            JSONObject res = new JSONObject();
-
             String username = modelTO.getUsername();
             String password = modelTO.getPassword();
 
@@ -87,9 +88,8 @@ public class LoginController {
                 refreshToken1.setExpires(refreshTokenDateExDate);
 
 
-
                 int rid = this.refreshTokenService.insert(refreshToken1);
-                System.err.println(this.refreshTokenService.get(1));
+                System.err.println(this.refreshTokenService.get(rid));
 
                 System.err.println(rid);
 
@@ -121,7 +121,6 @@ public class LoginController {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            JSONObject res = new JSONObject();
             res.put("error_message", "this user not found " + ex.getMessage());
             return new ResponseEntity<>(res.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
