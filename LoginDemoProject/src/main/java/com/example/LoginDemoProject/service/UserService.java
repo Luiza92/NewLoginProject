@@ -33,8 +33,8 @@ public class UserService {
         return this.userRepo.getByUsername(username);
     }
 
-    public User getByUserId(String user_id) throws SQLException {
-        return this.userRepo.getByUserId(user_id);
+    public User getByUserId(int userId) throws SQLException {
+        return this.userRepo.getByUserId(userId);
     }
 
     public boolean delete(int id) throws SQLException {

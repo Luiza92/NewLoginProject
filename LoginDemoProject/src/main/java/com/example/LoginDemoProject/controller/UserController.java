@@ -135,21 +135,21 @@ public class UserController {
 
 
     @DeleteMapping(path = "/api/user/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> deleteUser(@PathVariable("user_id") int user_id) throws JSONException {
+    public ResponseEntity<?> deleteUser(@PathVariable("user_id") int userId) throws JSONException {
         JSONObject res = new JSONObject();
         try {
 
 
-            boolean user = this.userService.delete(user_id);
-            System.err.print("delete user_id -  " + user_id);
+            boolean user = this.userService.delete(userId);
+            System.err.print("delete user_id -  " + userId);
 
             // if(user != null)
 
-            int delete = this.accessTokenService.deleteByUserId(user_id);
-            System.err.print("delete accessToken - " + user_id);
+            int delete = this.accessTokenService.deleteByUserId(userId);
+            System.err.print("delete accessToken - " + userId);
 
-            int delete1 = this.refreshTokenService.deleteByUserId(user_id);
-            System.err.println("delete refreshToken - " + user_id);
+            int delete1 = this.refreshTokenService.deleteByUserId(userId);
+            System.err.println("delete refreshToken - " + userId);
 
 
             res.put("message", "Deleted");
@@ -166,7 +166,7 @@ public class UserController {
 
 
     @PutMapping(path = "/api/user/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateUser1(@ModelAttribute User modelTO, @PathVariable("user_id") Integer user_id) throws JSONException {
+    public ResponseEntity<?> updateUser1(@ModelAttribute User modelTO, @PathVariable("user_id") Integer userId) throws JSONException {
         JSONObject res = new JSONObject();
         try {
 
@@ -202,7 +202,7 @@ public class UserController {
             System.err.println("email - " + modelTO.getEmail());
             System.err.println("password  - " + modelTO.getPassword());
             System.err.println("status - " + modelTO.getStatus());
-            System.err.println(user_id);
+            System.err.println(userId);
 
             User user = new User();
 
@@ -212,11 +212,11 @@ public class UserController {
             user.setEmail(modelTO.getEmail());
             user.setPassword(modelTO.getPassword());
             user.setStatus(modelTO.getStatus());
-            user.setId(user_id);
+            user.setId(userId);
 
-            int userId = this.userService.update(user);
+            int userId1 = this.userService.update(user);
 
-            User user1 = this.userService.get(user_id);
+            User user1 = this.userService.get(userId);
 
             res.put("username", user1.getUsername());
             res.put("firstName", user1.getFirstName());

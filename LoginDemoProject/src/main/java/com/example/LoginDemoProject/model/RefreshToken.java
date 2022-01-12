@@ -1,6 +1,5 @@
 package com.example.LoginDemoProject.model;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class RefreshToken {
@@ -10,13 +9,15 @@ public class RefreshToken {
     private String token;
     private Timestamp create;
     private Timestamp expires;
+    private int status;
 
-    public RefreshToken(int id, int user_id, String token, Timestamp create, Timestamp expires) {
+    public RefreshToken(int id, int user_id, String token, Timestamp create, Timestamp expires, int status) {
         this.id = id;
         this.user_id = user_id;
         this.token = token;
         this.create = create;
         this.expires = expires;
+        this.status = status;
     }
 
     public RefreshToken() {
@@ -53,6 +54,14 @@ public class RefreshToken {
 
     public void setCreate(Timestamp create) {
         this.create = create;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public Timestamp getExpires() {

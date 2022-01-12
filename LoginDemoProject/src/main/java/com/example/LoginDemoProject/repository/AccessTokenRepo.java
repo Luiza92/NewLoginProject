@@ -30,6 +30,7 @@ public class AccessTokenRepo implements AccessTokenRepository {
         accessToken.setCreate((Timestamp) result.get("create"));
         accessToken.setExpires((Timestamp) result.get("expires"));
         accessToken.setRefresh_token_id((int) result.get("refresh_token_id"));
+        accessToken.setStatus((int)result.get("status"));
 
         Integer accessToken_id = result.get("id") != null ? ((Long) result.get("id")).intValue() : null;
         accessToken.setId(accessToken_id);
@@ -39,12 +40,14 @@ public class AccessTokenRepo implements AccessTokenRepository {
     @Override
     public int insert(AccessToken accessToken) throws SQLException {
         return jdbcTemplate.update(
-                "insert into access_token (user_id, token, `create`, expires, refresh_token_id) values (?,?,?,?,?)",
+                "insert into access_token (user_id, token, `create`, expires, refresh_token_id,status) values (?,?,?,?,?,?)",
                 accessToken.getUser_id(),
                 accessToken.getToken(),
                 accessToken.getCreate(),
                 accessToken.getExpires(),
-                accessToken.getRefresh_token_id());
+                accessToken.getRefresh_token_id(),
+                accessToken.getStatus());
+
 
     }
 
@@ -67,6 +70,7 @@ public class AccessTokenRepo implements AccessTokenRepository {
                             a.setCreate(rs.getTimestamp("create"));
                             a.setExpires(rs.getTimestamp("expires"));
                             a.setRefresh_token_id(rs.getInt("refresh_token_id"));
+                            a.setStatus(rs.getInt("status"));
                             return a;
                         }
 
@@ -78,9 +82,9 @@ public class AccessTokenRepo implements AccessTokenRepository {
 
     @Override
     public int update(AccessToken accessToken) throws SQLException {
-        String sql = "update access_token set user_id = ?, token = ?, create = ?, expires = ?, refresh_token_id = ? ,  where id = ?";
-        System.err.println(accessToken.getUser_id() + ", " + accessToken.getToken() + ", " + accessToken.getCreate() + ", " + accessToken.getExpires() + ", " + accessToken.getRefresh_token_id() + ", " + accessToken.getId());
-        int result = jdbcTemplate.update(sql, accessToken.getUser_id(), accessToken.getToken(), accessToken.getCreate(), accessToken.getExpires(), accessToken.getRefresh_token_id(), accessToken.getId());
+        String sql = "update access_token set user_id = ?, token = ?, create = ?, expires = ?, refresh_token_id = ? , status = ?,   where id = ?";
+        System.err.println(accessToken.getUser_id() + ", " + accessToken.getToken() + ", " + accessToken.getCreate() + ", " + accessToken.getExpires() + ", " + accessToken.getRefresh_token_id() + ", " + accessToken.getStatus() + "," + accessToken.getId());
+        int result = jdbcTemplate.update(sql, accessToken.getUser_id(), accessToken.getToken(), accessToken.getCreate(), accessToken.getExpires(), accessToken.getRefresh_token_id(), accessToken.getStatus(), accessToken.getId());
         if (result > 0) {
             System.out.println("a new row has been update.");
             return accessToken.getId();

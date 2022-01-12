@@ -13,7 +13,7 @@ public interface UserRepository {
 
     User getByUsername(String username) throws SQLException;
 
-    User getByUserId(String user_id) throws SQLException;
+    User getByUserId(int userId) throws SQLException;
 
     boolean delete(int id) throws SQLException;
 

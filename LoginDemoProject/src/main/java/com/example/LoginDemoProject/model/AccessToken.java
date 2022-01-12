@@ -13,16 +13,18 @@ public class AccessToken {
     private Timestamp create;
     private Timestamp expires;
     private int refresh_token_id;
+    private int status;
     private List<Integer> userId;
 
 
-    public AccessToken(int id, int user_id, String token, Timestamp create, Timestamp expires, int refresh_token_id) {
+    public AccessToken(int id, int user_id, String token, Timestamp create, Timestamp expires, int refresh_token_id,int status) {
         this.id = id;
         this.user_id = user_id;
         this.token = token;
         this.create = create;
         this.expires = expires;
         this.refresh_token_id = refresh_token_id;
+        this.status = status;
     }
 
     public AccessToken() {
@@ -71,6 +73,14 @@ public class AccessToken {
 
     public int getRefresh_token_id() {
         return refresh_token_id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public void setRefresh_token_id(int refresh_token_id) {

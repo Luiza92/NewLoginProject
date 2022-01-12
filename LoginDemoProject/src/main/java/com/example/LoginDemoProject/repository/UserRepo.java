@@ -90,9 +90,9 @@ public class UserRepo implements UserRepository {
     }
 
     @Override
-    public User getByUserId(String user_id) throws SQLException {
+    public User getByUserId(int userId) throws SQLException {
         return jdbcTemplate.query(
-                "select * from users where user_id = ?;",
+                "select * from users where id = ?;",
                 new ResultSetExtractor<User>() {
                     @Override
                     public User extractData(ResultSet rs) throws SQLException,
@@ -111,7 +111,7 @@ public class UserRepo implements UserRepository {
                         return null;
                     }
                 },
-                user_id);
+                userId);
 
     }
 
@@ -135,7 +135,6 @@ public class UserRepo implements UserRepository {
             System.out.println("user has been update.");
             return user.getId();
         }
-        return user.getId();
-
+        return -1;
     }
 }

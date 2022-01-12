@@ -32,6 +32,7 @@ public class RefreshTokenRepo implements RefreshTokenRepository {
         refreshToken.setToken((String) result.get("token"));
         refreshToken.setCreate((Timestamp) result.get("create"));
         refreshToken.setExpires((Timestamp) result.get("expires"));
+        refreshToken.setStatus((int)result.get("status"));
 
 
         Integer refreshToken_id = result.get("id") != null ? ((Long) result.get("id")).intValue() : null;
@@ -45,11 +46,12 @@ public class RefreshTokenRepo implements RefreshTokenRepository {
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                PreparedStatement statement = con.prepareStatement(" insert into refresh_token (user_id, token, `create`,expires) values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement statement = con.prepareStatement(" insert into refresh_token (user_id, token, `create`,expires,status) values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                 statement.setInt(1,  refreshToken.getUser_id());
                 statement.setString(2,  refreshToken.getToken());
                 statement.setTimestamp(3, refreshToken.getCreate());
                 statement.setTimestamp(4,  refreshToken.getExpires());
+                statement.setInt(5,refreshToken.getStatus());
                 return statement;
             }
         }, holder);
@@ -75,6 +77,7 @@ public class RefreshTokenRepo implements RefreshTokenRepository {
                             refreshToken.setToken(rs.getString("token"));
                             refreshToken.setCreate(rs.getTimestamp("create"));
                             refreshToken.setExpires(rs.getTimestamp("expires"));
+                            refreshToken.setStatus(rs.getInt("status"));
                             return refreshToken;
                         }
 
@@ -87,9 +90,9 @@ public class RefreshTokenRepo implements RefreshTokenRepository {
 
     @Override
     public int update(RefreshToken refreshToken) throws SQLException {
-        String sql = "update refresh_token set user_id = ?, token = ?, create = ?, expires = ?,    where id = ?";
-        System.err.println(refreshToken.getUser_id() + ", " + refreshToken.getToken() + ", " + refreshToken.getCreate() + ", " + refreshToken.getExpires() + ", " + refreshToken.getId());
-        int result = jdbcTemplate.update(sql, refreshToken.getUser_id(), refreshToken.getToken(),  refreshToken.getCreate(), refreshToken.getExpires(), refreshToken.getId());
+        String sql = "update refresh_token set user_id = ?, token = ?, create = ?, expires = ?, status=?,    where id = ?";
+        System.err.println(refreshToken.getUser_id() + ", " + refreshToken.getToken() + ", " + refreshToken.getCreate() + ", " + refreshToken.getExpires() + ", " + refreshToken.getStatus() + ", "+  refreshToken.getId());
+        int result = jdbcTemplate.update(sql, refreshToken.getUser_id(), refreshToken.getToken(),  refreshToken.getCreate(), refreshToken.getExpires(), refreshToken.getStatus(), refreshToken.getId());
         if (result > 0) {
             System.out.println("a new refreshToken has been update.");
             return refreshToken.getId();

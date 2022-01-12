@@ -43,6 +43,7 @@ public class AccessTokenService extends AccessTokenRepo {
         accessToken.setCreate((Timestamp) result.get("create"));
         accessToken.setExpires((Timestamp) result.get("expires"));
         accessToken.setRefresh_token_id((int) result.get("refresh_token_id"));
+        accessToken.setStatus((int)result.get("status"));
 
 
         accessToken.setId((int)result.get("id"));

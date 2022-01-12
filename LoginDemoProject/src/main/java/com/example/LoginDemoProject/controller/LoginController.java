@@ -86,6 +86,7 @@ public class LoginController {
                 refreshToken1.setToken(refreshToken);
                 refreshToken1.setCreate(currentTimestamp);
                 refreshToken1.setExpires(refreshTokenDateExDate);
+                refreshToken1.setStatus(1);
 
 
                 int rid = this.refreshTokenService.insert(refreshToken1);
@@ -101,6 +102,7 @@ public class LoginController {
                 accessToken1.setCreate(currentTimestamp);
                 accessToken1.setExpires(accessTokenDateExDate);
                 accessToken1.setRefresh_token_id(rid);
+                accessToken1.setStatus(1);
 
                 int AccessToken = this.accessTokenService.insert(accessToken1);
                 System.err.println(this.accessTokenService.get(rid));
@@ -111,8 +113,9 @@ public class LoginController {
                 rest.put("access_token", accessToken1.getToken());
                 rest.put("create", accessToken1.getCreate());
                 rest.put("expires", accessToken1.getExpires());
-
+                rest.put("status",accessToken1.getStatus());
                 rest.put("refresh_token", refreshToken);
+
 
                 return new ResponseEntity<>(rest.toString(), HttpStatus.OK);
             } else {

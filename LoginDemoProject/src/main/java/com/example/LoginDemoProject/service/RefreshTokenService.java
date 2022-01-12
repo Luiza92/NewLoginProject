@@ -42,6 +42,7 @@ public class RefreshTokenService extends RefreshTokenRepo {
         refreshToken.setToken((String) result.get("token"));
         refreshToken.setCreate((Timestamp) result.get("create"));
         refreshToken.setExpires((Timestamp) result.get("expires"));
+        refreshToken.setStatus((int)result.get("status"));
 
         refreshToken.setId((int) result.get("id"));
         return refreshToken;
